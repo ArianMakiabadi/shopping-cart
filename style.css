@@ -20,7 +20,62 @@
 
 body {
   color: var(--mainBlack);
-  background: var(--mainWhite);
   font-family: "Lato", sans-serif;
   background-color: var(--bodyColor);
+}
+
+html {
+  font-size: 62.5%; /* 62.5% of the default 16px = 10px */
+}
+
+/* --------------- Navbar ---------------- */
+nav {
+  background-color: var(--secondaryColor);
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar {
+  max-width: 1170px;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar__menuIcon {
+  color: var(--primaryColor);
+  cursor: pointer;
+}
+
+.navbar__title {
+  color: var(--primaryColor);
+  font-size: 1.6rem;
+}
+
+.navbar__cart {
+  color: var(--primaryColor);
+  position: relative;
+  cursor: pointer;
+}
+
+.navbar__menuIcon i,
+.navbar__cart i {
+  font-size: 2rem;
+}
+
+.navbar__cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color: var(--mainWhite);
+  background-color: var(--mainRed);
+  border-radius: 100%;
+  width: 1.4rem;
+  height: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
