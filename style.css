@@ -127,10 +127,22 @@ nav {
 }
 
 .products__details {
-  background-color: var(--secondaryColor);
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1rem 3rem;
   font-size: 1.5rem;
   color: var(--primaryColor);
+}
+
+.btn {
+  display: inline-block;
+  background: var(--secondaryColor);
+  border: none;
+  outline: none;
+  padding: 0.5rem 1rem;
+  color: var(--primaryColor);
+  font-weight: bold;
+  margin: 20px auto 15px auto;
+  border-radius: 8px;
+  cursor: pointer;
 }
