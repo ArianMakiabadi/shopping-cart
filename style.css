@@ -210,22 +210,30 @@ nav {
   color: var(--mainGrey);
 }
 
-.cart-item-conteoller {
+.cart-item-controller {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   text-align: center;
+  gap: 0.6rem;
 }
-.cart-item-conteoller i.fa-chevron-up {
+.cart-item-controller i.fa-plus {
   font-weight: bold;
   cursor: pointer;
   color: var(--primaryColor);
 }
-.cart-item-conteoller i.fa-chevron-down {
+.cart-item-controller i.fa-minus {
   color: var(--mainRed);
   cursor: pointer;
   font-weight: bold;
 }
+.cart-item-controller i.fa-trash-alt {
+  color: var(--mainRed);
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 2rem;
+}
+
 .remove-item {
   cursor: pointer;
 }
