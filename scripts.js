@@ -6,6 +6,7 @@ const backDrop = document.querySelector(".backdrop");
 const confirmBtn = document.querySelector(".cart-item-confirm");
 const productsDOM = document.querySelector(".products__grid");
 
+// cart modal
 function showModal() {
   cartModal.style.opacity = "1";
   cartModal.style.top = "20%";
@@ -57,7 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const productsData = products.getProducts();
   const ui = new UI();
   ui.displayProducts(productsData);
+  Storage.saveProducts(productsData);
 });
 
 //3. storage
-class Storage {}
+class Storage {
+  static saveProducts(products) {
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+}
