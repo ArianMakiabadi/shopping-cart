@@ -16,9 +16,58 @@
     <title>Shopping Cart</title>
   </head>
   <body>
-    <header></header>
-    <main></main>
+    <header>
+      <nav>
+        <div class="navbar">
+          <span class="navbar__menuIcon">
+            <i class="fa-solid fa-bars"></i>
+          </span>
+          <p class="navbar__title">Arian Shopping</p>
+          <span class="navbar__cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="navbar__cart-count">0</span>
+          </span>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="products">
+        <div class="products__wrapper">
+          <h1 class="products__title">Our Products</h1>
+          <div class="products__grid">
+            <!-- single products -->
+          </div>
+        </div>
+      </section>
+      <section class="cart-center">
+        <div class="backdrop"></div>
+        <div class="cart">
+          <h3 class="cart-title">Your Cart</h3>
+          <div class="cart-content">
+            <!-- single item -->
+            <div class="cart-item">
+              <img class="cart-item-img" src="./images/product-2.jpeg" />
+              <div class="cart-item-desc">
+                <h4>product title</h4>
+                <h5>$ 12.99</h5>
+              </div>
+              <div class="cart-item-controller">
+                <i class="fa-solid fa-minus"></i>
+                <p>1</p>
+                <i class="fa-solid fa-plus"></i>
+                <i class="fas fa-trash-alt"></i>
+              </div>
+            </div>
+          </div>
+          <div class="cart-footer">
+            <span class="cart-total">total price : 90 $</span>
+            <button class="btn clear-cart">clear cart</button>
+            <button class="btn cart-item-confirm">confirm</button>
+          </div>
+        </div>
+      </section>
+    </main>
     <footer></footer>
-    <script src="scripts.js"></script>
+    <script type="module" src="scripts.js"></script>
   </body>
 </html>
