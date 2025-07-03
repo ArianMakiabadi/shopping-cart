@@ -9,6 +9,7 @@ const confirmBtn = document.querySelector(".cart-item-confirm");
 const productsDOM = document.querySelector(".products__grid");
 const cartTotal = document.querySelector(".cart-total");
 const cartCount = document.querySelector(".navbar__cart-count");
+const cartContent = document.querySelector(".cart-content");
 
 let cart = [];
 
@@ -64,7 +65,7 @@ class UI {
 
   getAddToCartBtns() {
     const addToCartBtns = document.querySelectorAll(".add-to-cart");
-    const btns = [...addToCartBtns];
+    const btns = [...addToCartBtns]; // converting nodeList to array
     btns.forEach((btn) => {
       const id = btn.dataset.id;
       // check if the product id is in cart or not
@@ -86,6 +87,8 @@ class UI {
         Storage.saveCart(cart);
         // update cart value and count
         this.setCartValue(cart);
+        // adding products to cart modul
+        this.addItemToCartModul(newItem);
       });
     });
   }
@@ -100,6 +103,22 @@ class UI {
     }, 0);
     cartTotal.innerText = `total price : ${totalPrice.toFixed(2)} $`;
     cartCount.innerText = cartItemsCount;
+  }
+
+  addItemToCartModul(cartItem) {
+    const div = document.createElement("div");
+    div.classList.add("cart-item");
+    div.innerHTML = `<img class="cart-item-img" src="${cartItem.imageUrl}"/>
+              <div class="cart-item-desc">
+                <h4>${cartItem.title}</h4>
+                <h5>${cartItem.price}$</h5>
+              </div>
+              <div class="cart-item-controller">
+                <i class="fa-solid fa-minus"></i>
+                <p>${cartItem.quantity}</p>
+                <i class="fa-solid fa-plus"></i>
+                <i class="fas fa-trash-alt"></i>`;
+    cartContent.appendChild(div);
   }
 }
 
