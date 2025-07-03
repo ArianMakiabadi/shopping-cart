@@ -8,6 +8,8 @@ const backDrop = document.querySelector(".backdrop");
 const confirmBtn = document.querySelector(".cart-item-confirm");
 const productsDOM = document.querySelector(".products__grid");
 
+let cart = [];
+
 // Modal Logic
 const Modal = {
   open() {
@@ -57,12 +59,47 @@ class UI {
       .join("");
     productsDOM.innerHTML = result;
   }
+
+  getAddToCartBtns() {
+    const addToCartBtns = document.querySelectorAll(".add-to-cart");
+    const btns = [...addToCartBtns];
+    btns.forEach((btn) => {
+      const id = btn.dataset.id;
+      // check if the product id is in cart or not
+      const isInCart = cart.find((product) => product.id === id);
+      if (isInCart) {
+        btn.innerText = "Already In Cart";
+        btn.disabled = true;
+      }
+
+      btn.addEventListener("click", (e) => {
+        e.target.innerText = "Already in cart";
+        e.target.disabled = true;
+        // get product from products
+        const addedProduct = Storage.getProduct(id);
+        // add product to cart
+        const newItem = { ...addedProduct, quantity: 1 };
+        cart.push(newItem);
+        // save to local storage
+        Storage.saveCart(cart);
+      });
+    });
+  }
 }
 
 // Storage Helper
 class Storage {
   static saveProducts(products) {
     localStorage.setItem("products", JSON.stringify(products));
+  }
+
+  static saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
+  static getProduct(id) {
+    const products = JSON.parse(localStorage.getItem("products"));
+    return products.find((p) => p.id === parseInt(id));
   }
 }
 
@@ -73,5 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const allProducts = products.getAllProducts();
   ui.renderProducts(allProducts);
+  ui.getAddToCartBtns();
   Storage.saveProducts(allProducts);
 });

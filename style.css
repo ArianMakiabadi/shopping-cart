@@ -147,6 +147,10 @@ nav {
   cursor: pointer;
 }
 
+.add-to-cart i {
+  pointer-events: none;
+}
+
 /* --------------- Cart ---------------- */
 .backdrop {
   background-color: rgba(0, 0, 0, 0.5);
