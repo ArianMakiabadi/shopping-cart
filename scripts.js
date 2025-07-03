@@ -86,38 +86,41 @@ class UI {
         // save to local storage
         Storage.saveCart(cart);
         // update cart value and count
-        this.setCartValue(cart);
+        this.updateCartUI(cart);
         // adding products to cart modul
-        this.addItemToCartModul(newItem);
+        this.addItemToCartUI(newItem);
       });
     });
   }
 
-  setCartValue(cart) {
-    let cartItemsCount = 0;
-    const totalPrice = cart.reduce((acc, curr) => {
-      //setting the count of items
-      cartItemsCount += curr.quantity;
-      //returning the total value
-      return acc + curr.quantity * curr.price;
-    }, 0);
-    cartTotal.innerText = `total price : ${totalPrice.toFixed(2)} $`;
-    cartCount.innerText = cartItemsCount;
+  updateCartUI(cart) {
+    const total = cart.reduce(
+      (acc, item) => {
+        acc.totalPrice += item.price * item.quantity;
+        acc.totalItems += item.quantity;
+        return acc;
+      },
+      { totalPrice: 0, totalItems: 0 }
+    );
+
+    cartTotal.innerText = `total price : ${total.totalPrice.toFixed(2)} $`;
+    cartCount.innerText = total.totalItems;
   }
 
-  addItemToCartModul(cartItem) {
+  addItemToCartUI({ imageUrl, title, price, quantity }) {
     const div = document.createElement("div");
     div.classList.add("cart-item");
-    div.innerHTML = `<img class="cart-item-img" src="${cartItem.imageUrl}"/>
+    div.innerHTML = `<img class="cart-item-img" src="${imageUrl}"/>
               <div class="cart-item-desc">
-                <h4>${cartItem.title}</h4>
-                <h5>${cartItem.price}$</h5>
+                <h4>${title}</h4>
+                <h5>${price}$</h5>
               </div>
               <div class="cart-item-controller">
                 <i class="fa-solid fa-minus"></i>
-                <p>${cartItem.quantity}</p>
+                <p>${quantity}</p>
                 <i class="fa-solid fa-plus"></i>
-                <i class="fas fa-trash-alt"></i>`;
+                <i class="fas fa-trash-alt"></i>
+              </div>`;
     cartContent.appendChild(div);
   }
 
@@ -126,10 +129,8 @@ class UI {
     const savedCart = Storage.getCart();
     cart = savedCart;
 
-    this.setCartValue(cart);
-    savedCart.forEach((cartItem) => {
-      this.addItemToCartModul(cartItem);
-    });
+    this.updateCartUI(cart);
+    cart.forEach((cartItem) => this.addItemToCartUI(cartItem));
   }
 }
 
