@@ -7,6 +7,8 @@ const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
 const confirmBtn = document.querySelector(".cart-item-confirm");
 const productsDOM = document.querySelector(".products__grid");
+const cartTotal = document.querySelector(".cart-total");
+const cartCount = document.querySelector(".navbar__cart-count");
 
 let cart = [];
 
@@ -82,8 +84,22 @@ class UI {
         cart.push(newItem);
         // save to local storage
         Storage.saveCart(cart);
+        // update cart value and count
+        this.setCartValue(cart);
       });
     });
+  }
+
+  setCartValue(cart) {
+    let cartItemsCount = 0;
+    const totalPrice = cart.reduce((acc, curr) => {
+      //setting the count of items
+      cartItemsCount += curr.quantity;
+      //returning the total value
+      return acc + curr.quantity * curr.price;
+    }, 0);
+    cartTotal.innerText = `total price : ${totalPrice.toFixed(2)} $`;
+    cartCount.innerText = cartItemsCount;
   }
 }
 
