@@ -67,7 +67,7 @@ class UI {
     const addToCartBtns = document.querySelectorAll(".add-to-cart");
     const btns = [...addToCartBtns]; // converting nodeList to array
     btns.forEach((btn) => {
-      const id = btn.dataset.id;
+      const id = parseInt(btn.dataset.id);
       // check if the product id is in cart or not
       const isInCart = cart.find((product) => product.id === id);
       if (isInCart) {
@@ -120,6 +120,17 @@ class UI {
                 <i class="fas fa-trash-alt"></i>`;
     cartContent.appendChild(div);
   }
+
+  setUpApp() {
+    //get cart from storage
+    const savedCart = Storage.getCart();
+    cart = savedCart;
+
+    this.setCartValue(cart);
+    savedCart.forEach((cartItem) => {
+      this.addItemToCartModul(cartItem);
+    });
+  }
 }
 
 // Storage Helper
@@ -130,6 +141,10 @@ class Storage {
 
   static saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
+  static getCart() {
+    return JSON.parse(localStorage.getItem("cart")) || [];
   }
 
   static getProduct(id) {
@@ -144,7 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI();
 
   const allProducts = products.getAllProducts();
+  Storage.saveProducts(allProducts);
+
+  ui.setUpApp();
   ui.renderProducts(allProducts);
   ui.getAddToCartBtns();
-  Storage.saveProducts(allProducts);
 });
