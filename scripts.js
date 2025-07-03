@@ -3,15 +3,17 @@ import { productsData } from "./products.js";
 
 // DOM Elements
 const cartBtn = document.querySelector(".navbar__cart");
+const confirmBtn = document.querySelector(".cart-item-confirm");
+const clearBtn = document.querySelector(".clear-cart");
 const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
-const confirmBtn = document.querySelector(".cart-item-confirm");
 const productsDOM = document.querySelector(".products__grid");
 const cartTotal = document.querySelector(".cart-total");
 const cartCount = document.querySelector(".navbar__cart-count");
 const cartContent = document.querySelector(".cart-content");
 
 let cart = [];
+let btnsDOM = [];
 
 // Modal Logic
 const Modal = {
@@ -64,9 +66,9 @@ class UI {
   }
 
   getAddToCartBtns() {
-    const addToCartBtns = document.querySelectorAll(".add-to-cart");
-    const btns = [...addToCartBtns]; // converting nodeList to array
-    btns.forEach((btn) => {
+    const addToCartBtns = [...document.querySelectorAll(".add-to-cart")]; // converting nodeList to array
+    btnsDOM = addToCartBtns;
+    addToCartBtns.forEach((btn) => {
       const id = parseInt(btn.dataset.id);
       // check if the product id is in cart or not
       const isInCart = cart.find((product) => product.id === id);
@@ -107,7 +109,7 @@ class UI {
     cartCount.innerText = total.totalItems;
   }
 
-  addItemToCartUI({ imageUrl, title, price, quantity }) {
+  addItemToCartUI({ imageUrl, title, price, quantity, id }) {
     const div = document.createElement("div");
     div.classList.add("cart-item");
     div.innerHTML = `<img class="cart-item-img" src="${imageUrl}"/>
@@ -116,12 +118,13 @@ class UI {
                 <h5>${price}$</h5>
               </div>
               <div class="cart-item-controller">
-                <i class="fa-solid fa-minus"></i>
+                <i class="fa-solid fa-minus" data-id="${id}"></i>
                 <p>${quantity}</p>
-                <i class="fa-solid fa-plus"></i>
-                <i class="fas fa-trash-alt"></i>
+                <i class="fa-solid fa-plus" data-id="${id}"></i>
+                <i class="fas fa-trash-alt" data-id="${id}"></i>
               </div>`;
     cartContent.appendChild(div);
+    // this.getDeleteBtns();
   }
 
   setUpApp() {
@@ -131,6 +134,55 @@ class UI {
 
     this.updateCartUI(cart);
     cart.forEach((cartItem) => this.addItemToCartUI(cartItem));
+  }
+
+  cartLogic() {
+    // clear cart
+    clearBtn.addEventListener("click", () => {
+      this.clearCart();
+    });
+
+    cartContent.addEventListener("click", (e) => {
+      const target = e.target;
+      const id = target.dataset.id;
+      if (!id) return;
+
+      if (target.classList.contains("fa-trash-alt")) {
+        this.removeItem(id);
+      }
+    });
+  }
+
+  clearCart() {
+    cart.forEach((item) => this.removeItem(item.id));
+    Modal.close();
+  }
+
+  removeItem(id) {
+    // Remove from cart array
+    cart = cart.filter((item) => item.id !== parseInt(id));
+    console.log(cart);
+
+    // Find the corresponding cart-item div using the trash icon's data-id
+    const trashBtn = cartContent.querySelector(`[data-id="${id}"]`);
+    const cartItemDiv = trashBtn?.closest(".cart-item");
+    if (cartItemDiv) {
+      cartContent.removeChild(cartItemDiv);
+    }
+
+    // Update UI and local storage
+    this.activateBtn(id);
+    this.updateCartUI(cart);
+    Storage.saveCart(cart);
+  }
+
+  activateBtn(id) {
+    const disabledButton = btnsDOM.find(
+      (btn) => parseInt(btn.dataset.id) === parseInt(id)
+    );
+
+    disabledButton.innerHTML = `<i class="fas fa-shopping-cart"></i>Add to cart`;
+    disabledButton.disabled = false;
   }
 }
 
@@ -164,5 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   ui.setUpApp();
   ui.renderProducts(allProducts);
+  ui.cartLogic();
   ui.getAddToCartBtns();
 });
