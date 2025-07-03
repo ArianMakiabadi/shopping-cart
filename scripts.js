@@ -112,6 +112,7 @@ class UI {
   addItemToCartUI({ imageUrl, title, price, quantity, id }) {
     const div = document.createElement("div");
     div.classList.add("cart-item");
+    div.dataset.id = id;
     div.innerHTML = `<img class="cart-item-img" src="${imageUrl}"/>
               <div class="cart-item-desc">
                 <h4>${title}</h4>
@@ -119,12 +120,11 @@ class UI {
               </div>
               <div class="cart-item-controller">
                 <i class="fa-solid fa-minus" data-id="${id}"></i>
-                <p>${quantity}</p>
+                <p class="cart-item__quantity">${quantity}</p>
                 <i class="fa-solid fa-plus" data-id="${id}"></i>
                 <i class="fas fa-trash-alt" data-id="${id}"></i>
               </div>`;
     cartContent.appendChild(div);
-    // this.getDeleteBtns();
   }
 
   setUpApp() {
@@ -147,8 +147,13 @@ class UI {
       const id = target.dataset.id;
       if (!id) return;
 
+      // Event handling for delete / increment / decrement
       if (target.classList.contains("fa-trash-alt")) {
         this.removeItem(id);
+      } else if (target.classList.contains("fa-plus")) {
+        this.changeQuantity(id, 1);
+      } else if (target.classList.contains("fa-minus")) {
+        this.changeQuantity(id, -1);
       }
     });
   }
@@ -174,6 +179,29 @@ class UI {
     this.activateBtn(id);
     this.updateCartUI(cart);
     Storage.saveCart(cart);
+  }
+
+  changeQuantity(id, delta) {
+    const item = cart.find((item) => item.id === parseInt(id));
+    if (!item) return;
+
+    item.quantity += delta;
+    this.updateCartUI(cart);
+    Storage.saveCart(cart);
+
+    if (item.quantity <= 0) {
+      this.removeItem(id);
+      return;
+    }
+
+    // Update quantity in DOM
+    const quantityEl = cartContent.querySelector(
+      `.cart-item[data-id="${id}"] .cart-item__quantity`
+    );
+
+    if (quantityEl) {
+      quantityEl.textContent = item.quantity;
+    }
   }
 
   activateBtn(id) {
